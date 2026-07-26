@@ -1,7 +1,5 @@
 {
   "name": "ai-pipedrive-v2",
-  "scripts": {
-  "name": "ai-pipedrive-v2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,5 +21,5 @@
     "typescript": "^5.4.2",
     "@types/react": "^18.2.66",
     "@types/node": "^20.11.30"
-    
   }
+}
