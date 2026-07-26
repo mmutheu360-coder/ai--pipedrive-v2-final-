@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+   import { supabase } from '../../lib/supabase'
 
 export default async function DealDetail({params}: {params: {id: string}}) {
   const { data: deal } = await supabase.from('deals').select('*, contacts(*)').eq('id', params.id).single()
