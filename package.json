@@ -7,10 +7,14 @@
     "build": "next build",
     "start": "next start"
   },
+  "devDependencies": {
+    "typescript": "^5.4.2",
+    "@types/react": "^18.2.66",
+    "@types/node": "^20.11.30"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
-    "next": "14.2.5",
+    "next": "^14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
-  }
 }
