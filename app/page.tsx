@@ -1,5 +1,5 @@
 import Link from 'next/link'
-   import { supabase } from './lib/supabase'
+   import { supabase } from '../lib/supabase'
 
 export default async function DealsPage() {
   const { data: deals } = await supabase.from('deals').select('*').order('created_at', {ascending: false})
