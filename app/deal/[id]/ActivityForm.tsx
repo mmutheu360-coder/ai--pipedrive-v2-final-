@@ -33,12 +33,14 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
         <option value="note">Note</option>
       </select>
       <input
-        required
-        placeholder="Description"
-        value={description}
-        onChange={e => setDescription(e.target.value)}
-        className="border p-2 rounded w-full"
-      />
+  required
+  placeholder="Description"
+  value={description}
+  onChange={e => setDescription(e.target.value)}
+  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSubmit(e) } }}
+  className="border p-2 rounded w-full"
+/>
+    
       <button className="bg-blue-600 text-white px-4 py-2 rounded">Add Activity</button>
     </form>
   )
