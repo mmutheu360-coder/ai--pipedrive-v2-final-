@@ -13,7 +13,7 @@ export default function NotesEditor({ dealId, initialNotes }: { dealId: string, 
       const { error } = await supabase.from('deals').update({ notes }).eq('id', dealId)
       if (error) throw error
       setEditing(false)
-      router.refresh()
+window.location.reload()
     } catch (err: any) {
       alert('Error saving notes: ' + err.message)
     }
