@@ -2,7 +2,10 @@ import Link from 'next/link'
    import { supabase } from '../lib/supabase'
 
 export default async function DealsPage() {
-  const { data: deals } = await supabase.from('deals').select('*').order('created_at', {ascending: false})
+  const { data: deals, error } = await supabase.from('deals').select('*').order('created_at', {ascending: false})
+if (error) {
+  return <p>Error loading deals: {error.message}</p>
+}
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
