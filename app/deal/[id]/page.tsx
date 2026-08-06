@@ -1,4 +1,3 @@
-
 import { supabase } from '../../../lib/supabase'
 import ActivityForm from './ActivityForm'
 import NotesEditor from './NotesEditor'
