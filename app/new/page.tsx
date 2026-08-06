@@ -38,7 +38,7 @@ const handleSubmit = async (e: any) => {
       <input required placeholder="Contact Name" onChange={e=>setForm({...form, contact:e.target.value})} className="border p-2 w-full"/>
       <input required placeholder="Contact Email" type="email" onChange={e=>setForm({...form, email:e.target.value})} className="border p-2 w-full"/>
       <select onChange={e=>setForm({...form, stage:e.target.value})} className="border p-2 w-full">
-        <option>Lead</option><option>Proposal</option><option>Negotiation</option><option>Won</option><option>Lost</option>
+        <option>lead</option><option>proposal</option><option>negotiation</option><option>won</option><option>lost</option>
       </select>
       <button className="bg-blue-600 text-white px-4 py-2 rounded w-full">Save Deal</button>
     </form>
