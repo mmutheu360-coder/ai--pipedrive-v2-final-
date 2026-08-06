@@ -6,13 +6,28 @@ import { useRouter } from 'next/navigation'
 export default function NewDeal() {
   const [form, setForm] = useState({title:'', company:'', value:0, stage:'Lead', contact:'', email:''})
   const router = useRouter()
+const handleSubmit = async (e: any) => {
+  e.preventDefault()
+  try {
+    const { data: contact, error: contactError } = await supabase
+      .from('contacts')
+      .insert({ name: form.contact, email: form.email })
+      .select()
+      .single()
+    if (contactError) throw contactError
 
-  const handleSubmit = async (e:any) => {
-    e.preventDefault()
-    const { data: contact } = await supabase.from('contacts').insert({name: form.contact, email: form.email, company: form.company}).select().single()
-    await supabase.from('deals').insert({title: form.title, company: form.company, value: form.value, stage: form.stage, contact_id: contact.id})
+    const { error: dealError } = await supabase
+      .from('deals')
+      .insert({ title: form.title, company: form.company, value: form.value, stage: form.stage, contact_id: contact.id })
+    if (dealError) throw dealError
+
     router.push('/')
+  } catch (err: any) {
+    alert('Error saving deal: ' + err.message)
+    console.error(err)
   }
+}
+  
 
   return (
     <form onSubmit={handleSubmit} className="p-6 max-w-xl mx-auto space-y-4">
