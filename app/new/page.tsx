@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function NewDeal() {
-  const [form, setForm] = useState({title:'', company:'', value:0, stage:'Lead', contact:'', email:''})
+  const [form, setForm] = useState({title:'', company:'', value:0, stage:'lead', contact:'', email:''})
   const router = useRouter()
 const handleSubmit = async (e: any) => {
   e.preventDefault()
@@ -38,7 +38,7 @@ const handleSubmit = async (e: any) => {
       <input required placeholder="Contact Name" onChange={e=>setForm({...form, contact:e.target.value})} className="border p-2 w-full"/>
       <input required placeholder="Contact Email" type="email" onChange={e=>setForm({...form, email:e.target.value})} className="border p-2 w-full"/>
       <select onChange={e=>setForm({...form, stage:e.target.value})} className="border p-2 w-full">
-        <option>lead</option><option>proposal</option><option>negotiation</option><option>won</option><option>lost</option>
+        <option>lead</option><option>qualified</option><option>proposal</option><option>negotiation</option><option>won</option><option>lost</option>
       </select>
       <button className="bg-blue-600 text-white px-4 py-2 rounded w-full">Save Deal</button>
     </form>
