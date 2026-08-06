@@ -1,4 +1,5 @@
-export const metadata = {
+import './globals.css'
+  export const metadata = {
   title: 'AI Pipedrive',
   description: 'AI powered Pipedrive',
 }
