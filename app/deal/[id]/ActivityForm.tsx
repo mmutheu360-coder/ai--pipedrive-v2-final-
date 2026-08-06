@@ -18,7 +18,7 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
       })
       if (error) throw error
       setDescription('')
-      router.refresh()
+window.location.reload()
     } catch (err: any) {
       alert('Error adding activity: ' + err.message)
     }
