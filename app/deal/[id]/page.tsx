@@ -5,8 +5,6 @@ import NotesEditor from './NotesEditor'
 export const dynamic = 'force-dynamic'
 
 export default async function DealDetail({params}: {params: {id: string}}) {
-
-export default async function DealDetail({params}: {params: {id: string}}) {
   const { data: deal } = await supabase.from('deals').select('*, contacts(*)').eq('id', params.id).single()
   const { data: activities } = await supabase.from('activities').select('*').eq('deal_id', params.id)
 
