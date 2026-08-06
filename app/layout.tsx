@@ -9,8 +9,11 @@ export default function RootLayout({
   children
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
-}
+  <html lang="en">
+    <body>
+      <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+      <script dangerouslySetInnerHTML={{ __html: `eruda.init();` }} />
+      {children}
+    </body>
+  </html>
+)
