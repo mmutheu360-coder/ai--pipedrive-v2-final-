@@ -21,7 +21,7 @@ const handleSubmit = async (e: any) => {
       .insert({ title: form.title, company: form.company, value: form.value, stage: form.stage, contact_id: contact.id })
     if (dealError) throw dealError
 
-    router.push('/')
+    window.location.href = '/'
   } catch (err: any) {
     alert('Error saving deal: ' + err.message)
     console.error(err)
