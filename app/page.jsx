@@ -21,7 +21,15 @@ if (error) {
               <span className="text-green-600">${deal.value}</span>
             </div>
             <p className="text-gray-600">{deal.company}</p>
-            <span className="text-sm bg-gray-200 px-2 py-1 rounded mt-2 inline-block">{deal.stage}</span>
+            <span className={`text-sm px-2 py-1 rounded mt-2 inline-block ${
+  deal.stage === 'lead' ? 'bg-gray-200 text-gray-700' :
+  deal.stage === 'qualified' ? 'bg-blue-100 text-blue-700' :
+  deal.stage === 'proposal' ? 'bg-purple-100 text-purple-700' :
+  deal.stage === 'negotiation' ? 'bg-orange-100 text-orange-700' :
+  deal.stage === 'won' ? 'bg-green-100 text-green-700' :
+  deal.stage === 'lost' ? 'bg-red-100 text-red-700' :
+  'bg-gray-200 text-gray-700'
+}`}>{deal.stage}</span>
           </Link>
         ))}
       </div>
