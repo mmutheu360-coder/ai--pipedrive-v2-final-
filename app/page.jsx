@@ -1,5 +1,6 @@
 import Link from 'next/link'
    import { supabase } from '../lib/supabase'
+export const dynamic = 'force-dynamic'
 
 export default async function DealsPage() {
   const { data: deals, error } = await supabase.from('deals').select('*').order('created_at', {ascending: false})
