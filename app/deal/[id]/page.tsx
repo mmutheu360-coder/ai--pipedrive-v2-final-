@@ -15,6 +15,15 @@ export default async function DealDetail({params}: {params: {id: string}}) {
       <h1 className="text-3xl font-bold">{deal.title}</h1>
       <p>{deal.company} - ${deal.value}</p>
       <p className="mt-2">Contact: {deal.contacts?.name} - {deal.contacts?.email}</p>
+      <span className={`text-sm px-2 py-1 rounded mt-2 inline-block ${
+  deal.stage === 'lead' ? 'bg-gray-200 text-gray-700' :
+  deal.stage === 'qualified' ? 'bg-blue-100 text-blue-700' :
+  deal.stage === 'proposal' ? 'bg-purple-100 text-purple-700' :
+  deal.stage === 'negotiation' ? 'bg-orange-100 text-orange-700' :
+  deal.stage === 'won' ? 'bg-green-100 text-green-700' :
+  deal.stage === 'lost' ? 'bg-red-100 text-red-700' :
+  'bg-gray-200 text-gray-700'
+}`}>{deal.stage}</span>
 
       <NotesEditor dealId={deal.id} initialNotes={deal.notes} />
 
