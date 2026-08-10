@@ -5,18 +5,18 @@ import { supabase } from '../../lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export default function NewDeal() {
-  const router = useRouter()
-
   const [form, setForm] = useState({
     title: '',
     company: '',
-    value: 0,
+    value: '',
     stage: 'lead',
     contact: '',
-    email: '',
+    email: ''
   })
 
   const [message, setMessage] = useState('')
+
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,55 +24,52 @@ export default function NewDeal() {
     setMessage('Saving deal...')
 
     try {
-      // 1. Create the contact
+      // 1. Create contact
       const { data: contact, error: contactError } = await supabase
         .from('contacts')
         .insert({
           name: form.contact,
-          email: form.email,
+          email: form.email
         })
         .select()
         .single()
 
       if (contactError) {
         console.error('CONTACT INSERT ERROR:', contactError)
-        setMessage(`CONTACT ERROR: ${contactError.message}`)
-        return
+        throw contactError
       }
 
-      console.log('CONTACT CREATED:', contact)
-
-      // 2. Create the deal
+      // 2. Create deal
       const { data: deal, error: dealError } = await supabase
         .from('deals')
         .insert({
           title: form.title,
           company: form.company,
-          value: form.value,
+          value: Number(form.value),
           stage: form.stage,
-          contact_id: contact.id,
+          contact_id: contact.id
         })
         .select()
         .single()
 
       if (dealError) {
         console.error('DEAL INSERT ERROR:', dealError)
-        setMessage(`DEAL ERROR: ${dealError.message}`)
-        return
+        throw dealError
       }
 
-      console.log('DEAL CREATED:', deal)
+      console.log('DEAL SAVED:', deal)
 
-      setMessage(`Deal saved successfully! ID: ${deal.id}`)
+      setMessage('Deal saved successfully!')
 
-      // Give the browser a moment to receive the response,
-      // then go back to the deals list.
-      router.push('/')
+      // Go back to the deals page
+      router.replace('/')
+
+      // Refresh the server-side deals list
       router.refresh()
 
     } catch (err: any) {
-      console.error('NEW DEAL ERROR:', err)
-      setMessage(`ERROR: ${err.message}`)
+      console.error('SAVE DEAL ERROR:', err)
+      setMessage(`Error saving deal: ${err.message}`)
     }
   }
 
@@ -81,14 +78,20 @@ export default function NewDeal() {
       onSubmit={handleSubmit}
       className="p-6 max-w-xl mx-auto space-y-4"
     >
-      <h1 className="text-2xl font-bold">Add New Deal</h1>
+
+      <h1 className="text-2xl font-bold">
+        Add New Deal
+      </h1>
 
       <input
         required
         placeholder="Deal Title"
         value={form.title}
         onChange={e =>
-          setForm({ ...form, title: e.target.value })
+          setForm({
+            ...form,
+            title: e.target.value
+          })
         }
         className="border p-2 w-full"
       />
@@ -98,7 +101,10 @@ export default function NewDeal() {
         placeholder="Company"
         value={form.company}
         onChange={e =>
-          setForm({ ...form, company: e.target.value })
+          setForm({
+            ...form,
+            company: e.target.value
+          })
         }
         className="border p-2 w-full"
       />
@@ -109,7 +115,10 @@ export default function NewDeal() {
         type="number"
         value={form.value}
         onChange={e =>
-          setForm({ ...form, value: Number(e.target.value) })
+          setForm({
+            ...form,
+            value: e.target.value
+          })
         }
         className="border p-2 w-full"
       />
@@ -119,7 +128,10 @@ export default function NewDeal() {
         placeholder="Contact Name"
         value={form.contact}
         onChange={e =>
-          setForm({ ...form, contact: e.target.value })
+          setForm({
+            ...form,
+            contact: e.target.value
+          })
         }
         className="border p-2 w-full"
       />
@@ -130,7 +142,10 @@ export default function NewDeal() {
         type="email"
         value={form.email}
         onChange={e =>
-          setForm({ ...form, email: e.target.value })
+          setForm({
+            ...form,
+            email: e.target.value
+          })
         }
         className="border p-2 w-full"
       />
@@ -138,7 +153,10 @@ export default function NewDeal() {
       <select
         value={form.stage}
         onChange={e =>
-          setForm({ ...form, stage: e.target.value })
+          setForm({
+            ...form,
+            stage: e.target.value
+          })
         }
         className="border p-2 w-full"
       >
@@ -162,6 +180,7 @@ export default function NewDeal() {
           {message}
         </p>
       )}
+
     </form>
   )
-}
+        }
