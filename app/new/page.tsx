@@ -22,7 +22,6 @@ const handleSubmit = async (e: any) => {
     if (dealError) throw dealError
 
     router.replace('/')
-router.refresh()
   } catch (err: any) {
     alert('Error saving deal: ' + err.message)
     console.error(err)
