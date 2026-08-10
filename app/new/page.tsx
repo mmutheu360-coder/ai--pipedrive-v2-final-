@@ -62,7 +62,7 @@ export default function NewDeal() {
       setMessage('Deal saved successfully!')
 
       // Go back to the deals page
-      router.replace('/')
+      window.location.href = '/'
 
       // Refresh the server-side deals list
       router.refresh()
