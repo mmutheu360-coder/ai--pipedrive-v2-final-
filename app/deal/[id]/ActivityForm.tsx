@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export default function ActivityForm({ dealId }: { dealId: string }) {
   const router = useRouter()
@@ -14,6 +14,11 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!description.trim()) {
+      setMessage('Please enter a description.')
+      return
+    }
+
     setMessage('Saving...')
 
     try {
@@ -22,7 +27,7 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
         .insert({
           deal_id: dealId,
           type,
-          description: description.trim(),
+          description: description.trim()
         })
         .select()
         .single()
@@ -38,7 +43,7 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
       setDescription('')
       setMessage('Activity saved successfully.')
 
-      // Refresh the server-rendered deal page
+      // Tell Next.js to fetch the activities again
       router.refresh()
 
     } catch (err: any) {
