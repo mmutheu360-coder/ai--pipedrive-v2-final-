@@ -1,9 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { supabase } from '../../../lib/supabase'
 
 export default function ActivityForm({ dealId }: { dealId: string }) {
+  const router = useRouter()
+
   const [type, setType] = useState('call')
   const [description, setDescription] = useState('')
   const [message, setMessage] = useState('')
@@ -11,7 +14,10 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!description.trim()) return
+    if (!description.trim()) {
+      setMessage('Please enter a description.')
+      return
+    }
 
     setMessage('Saving...')
 
@@ -20,8 +26,8 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
         .from('activities')
         .insert({
           deal_id: dealId,
-          type,
-          description: description.trim(),
+          type: type,
+          description: description.trim()
         })
         .select()
         .single()
@@ -34,11 +40,11 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
 
       console.log('ACTIVITY SAVED:', data)
 
-      setMessage('Activity saved successfully.')
       setDescription('')
+      setMessage('Activity saved successfully.')
 
-      // Force the browser to fetch the latest server data
-      window.location.reload()
+      // Tell Next.js to re-fetch the server component
+      router.refresh()
 
     } catch (err: any) {
       console.error('ACTIVITY ERROR:', err)
@@ -51,7 +57,7 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
 
       <select
         value={type}
-        onChange={e => setType(e.target.value)}
+        onChange={(e) => setType(e.target.value)}
         className="border p-2 rounded"
       >
         <option value="call">Call</option>
@@ -64,7 +70,7 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
         required
         placeholder="Description"
         value={description}
-        onChange={e => setDescription(e.target.value)}
+        onChange={(e) => setDescription(e.target.value)}
         className="border p-2 rounded w-full"
       />
 
