@@ -1,10 +1,12 @@
 'use client'
-
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export default function NewDeal() {
+
+  const router = useRouter()
+
   const [form, setForm] = useState({
     title: '',
     company: '',
@@ -16,14 +18,13 @@ export default function NewDeal() {
 
   const [message, setMessage] = useState('')
 
-  const router = useRouter()
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    setMessage('Saving deal...')
+    setMessage('Saving...')
 
     try {
+
       // 1. Create contact
       const { data: contact, error: contactError } = await supabase
         .from('contacts')
@@ -59,17 +60,28 @@ export default function NewDeal() {
 
       console.log('DEAL SAVED:', deal)
 
-      setMessage('Deal saved successfully!')
+      setMessage('Deal saved successfully.')
 
-      // Go back to the deals page
-      window.location.href = '/'
+      // Clear form
+      setForm({
+        title: '',
+        company: '',
+        value: '',
+        stage: 'lead',
+        contact: '',
+        email: ''
+      })
 
-      // Refresh the server-side deals list
-      router.refresh()
+      // Give Supabase/Next a moment, then reload the deals page
+      setTimeout(() => {
+        window.location.href = '/'
+      }, 500)
 
     } catch (err: any) {
-      console.error('SAVE DEAL ERROR:', err)
-      setMessage(`Error saving deal: ${err.message}`)
+
+      console.error('DEAL SAVE ERROR:', err)
+
+      setMessage(`ERROR: ${err.message}`)
     }
   }
 
@@ -87,7 +99,7 @@ export default function NewDeal() {
         required
         placeholder="Deal Title"
         value={form.title}
-        onChange={e =>
+        onChange={(e) =>
           setForm({
             ...form,
             title: e.target.value
@@ -100,7 +112,7 @@ export default function NewDeal() {
         required
         placeholder="Company"
         value={form.company}
-        onChange={e =>
+        onChange={(e) =>
           setForm({
             ...form,
             company: e.target.value
@@ -114,7 +126,7 @@ export default function NewDeal() {
         placeholder="Value"
         type="number"
         value={form.value}
-        onChange={e =>
+        onChange={(e) =>
           setForm({
             ...form,
             value: e.target.value
@@ -127,7 +139,7 @@ export default function NewDeal() {
         required
         placeholder="Contact Name"
         value={form.contact}
-        onChange={e =>
+        onChange={(e) =>
           setForm({
             ...form,
             contact: e.target.value
@@ -141,7 +153,7 @@ export default function NewDeal() {
         placeholder="Contact Email"
         type="email"
         value={form.email}
-        onChange={e =>
+        onChange={(e) =>
           setForm({
             ...form,
             email: e.target.value
@@ -152,7 +164,7 @@ export default function NewDeal() {
 
       <select
         value={form.stage}
-        onChange={e =>
+        onChange={(e) =>
           setForm({
             ...form,
             stage: e.target.value
@@ -176,11 +188,11 @@ export default function NewDeal() {
       </button>
 
       {message && (
-        <p className="text-sm">
+        <p className="text-sm mt-2">
           {message}
         </p>
       )}
 
     </form>
   )
-        }
+      }
