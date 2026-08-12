@@ -5,42 +5,29 @@ import NotesEditor from './NotesEditor'
 export const dynamic = 'force-dynamic'
 
 export default async function DealDetail({
-  params,
+  params
 }: {
   params: { id: string }
 }) {
-  // Get the deal
-  const {
-    data: deal,
-    error: dealError,
-  } = await supabase
+
+  const { data: deal, error: dealError } = await supabase
     .from('deals')
     .select('*, contacts(*)')
     .eq('id', params.id)
     .single()
 
-  // Get activities
-  const {
-    data: activities,
-    error: activitiesError,
-  } = await supabase
+  const { data: activities, error: activityError } = await supabase
     .from('activities')
     .select('*')
     .eq('deal_id', params.id)
     .order('created_at', { ascending: false })
 
-  console.log('DEAL ID:', params.id)
-  console.log('ACTIVITIES:', activities)
-  console.log('ACTIVITIES ERROR:', activitiesError)
-
   if (dealError) {
     console.error('DEAL LOAD ERROR:', dealError)
-    return (
-      <div className="p-6">
-        <p>Deal loading error:</p>
-        <p>{dealError.message}</p>
-      </div>
-    )
+  }
+
+  if (activityError) {
+    console.error('ACTIVITY LOAD ERROR:', activityError)
   }
 
   if (!deal) {
@@ -91,32 +78,25 @@ export default async function DealDetail({
         Activities
       </h2>
 
-      {/* SHOW QUERY ERROR IF THERE IS ONE */}
-      {activitiesError && (
-        <div className="mt-2 p-3 border border-red-400 rounded text-red-600">
-          <p className="font-bold">
-            Could not load activities
-          </p>
-          <p>
-            {activitiesError.message}
-          </p>
-        </div>
+      {activityError && (
+        <p className="text-red-600 mt-2">
+          Could not load activities: {activityError.message}
+        </p>
       )}
 
-      {/* SHOW ACTIVITIES */}
-      {!activitiesError && activities?.length === 0 && (
+      {!activityError && activities?.length === 0 && (
         <p>No activities yet</p>
       )}
 
-      {!activitiesError &&
-        activities?.map((a) => (
-          <div
-            key={a.id}
-            className="border p-2 mt-2 rounded"
-          >
-            <strong>{a.type}:</strong> {a.description}
-          </div>
-        ))}
+      {activities?.map((activity) => (
+        <div
+          key={activity.id}
+          className="border p-2 mt-2 rounded"
+        >
+          <strong>{activity.type}:</strong>{' '}
+          {activity.description}
+        </div>
+      ))}
 
       <ActivityForm dealId={deal.id} />
 
