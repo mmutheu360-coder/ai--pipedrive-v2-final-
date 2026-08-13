@@ -40,11 +40,10 @@ export default function ActivityForm({ dealId }: { dealId: string }) {
 
       console.log('ACTIVITY SAVED:', data)
 
-      setDescription('')
       setMessage('Activity saved successfully.')
 
-      // Tell Next.js to re-fetch the server component
-      router.refresh()
+// Force a full reload so the server re-fetches fresh data
+window.location.reload()
 
     } catch (err: any) {
       console.error('ACTIVITY ERROR:', err)
