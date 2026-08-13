@@ -31,11 +31,10 @@ export default function NotesEditor({
         return
       }
 
-      setEditing(false)
       setMessage('Notes saved successfully.')
 
-      // Refresh the server-rendered deal data
-      router.refresh()
+// Force a full reload so the server re-fetches fresh data
+window.location.reload()
 
     } catch (err: any) {
       console.error('NOTES ERROR:', err)
