@@ -2,6 +2,7 @@ import EditDealForm from './EditDealForm'
   import { supabase } from '../../../lib/supabase'
 import ActivityForm from './ActivityForm'
 import NotesEditor from './NotesEditor'
+import AISummary from './AISummary'
 
 export const dynamic = 'force-dynamic'
 
@@ -80,6 +81,7 @@ export default async function DealDetail({
       ))}
 
       <ActivityForm dealId={deal.id} />
+      <AISummary deal={deal} activities={activities ?? []} />
 
     </div>
   )
