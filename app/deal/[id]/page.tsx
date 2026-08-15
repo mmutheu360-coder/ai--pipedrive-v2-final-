@@ -85,4 +85,5 @@ export default async function DealDetail({
 
     </div>
   )
+  
 }
