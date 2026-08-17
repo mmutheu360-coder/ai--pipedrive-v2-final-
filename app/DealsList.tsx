@@ -1,9 +1,6 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-const [aiQuery, setAiQuery] = useState('')
-  const [aiLoading, setAiLoading] = useState(false)
-  const [aiIds, setAiIds] = useState<string[] | null>(null)
 
 const STAGES = ['lead', 'qualified', 'proposal', 'negotiation', 'won', 'lost']
 
@@ -20,20 +17,11 @@ export default function DealsList({ deals }: { deals: any[] }) {
   const [search, setSearch] = useState('')
   const [stageFilter, setStageFilter] = useState('all')
 
-  const baseDeals = aiIds !== null
-    ? deals.filter((d) => aiIds.includes(d.id))
-    : deals
+  const [aiQuery, setAiQuery] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiIds, setAiIds] = useState<string[] | null>(null)
 
-  const filtered = baseDeals.filter((deal) => {
-    const matchesSearch =
-      deal.title?.toLowerCase().includes(search.toLowerCase()) ||
-      deal.company?.toLowerCase().includes(search.toLowerCase())
-
-    const matchesStage =
-      stageFilter === 'all' || deal.stage === stageFilter
-
-    return matchesSearch && matchesStage
-    const handleAiSearch = async () => {
+  const handleAiSearch = async () => {
     if (!aiQuery.trim()) {
       setAiIds(null)
       return
@@ -57,7 +45,21 @@ export default function DealsList({ deals }: { deals: any[] }) {
     } finally {
       setAiLoading(false)
     }
-    }
+  }
+
+  const baseDeals = aiIds !== null
+    ? deals.filter((d) => aiIds.includes(d.id))
+    : deals
+
+  const filtered = baseDeals.filter((deal) => {
+    const matchesSearch =
+      deal.title?.toLowerCase().includes(search.toLowerCase()) ||
+      deal.company?.toLowerCase().includes(search.toLowerCase())
+
+    const matchesStage =
+      stageFilter === 'all' || deal.stage === stageFilter
+
+    return matchesSearch && matchesStage
   })
 
   return (
@@ -139,4 +141,4 @@ export default function DealsList({ deals }: { deals: any[] }) {
 
     </div>
   )
-}
+      }
