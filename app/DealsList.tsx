@@ -1,6 +1,9 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+const [aiQuery, setAiQuery] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiIds, setAiIds] = useState<string[] | null>(null)
 
 const STAGES = ['lead', 'qualified', 'proposal', 'negotiation', 'won', 'lost']
 
@@ -17,7 +20,11 @@ export default function DealsList({ deals }: { deals: any[] }) {
   const [search, setSearch] = useState('')
   const [stageFilter, setStageFilter] = useState('all')
 
-  const filtered = deals.filter((deal) => {
+  const baseDeals = aiIds !== null
+    ? deals.filter((d) => aiIds.includes(d.id))
+    : deals
+
+  const filtered = baseDeals.filter((deal) => {
     const matchesSearch =
       deal.title?.toLowerCase().includes(search.toLowerCase()) ||
       deal.company?.toLowerCase().includes(search.toLowerCase())
@@ -26,10 +33,60 @@ export default function DealsList({ deals }: { deals: any[] }) {
       stageFilter === 'all' || deal.stage === stageFilter
 
     return matchesSearch && matchesStage
+    const handleAiSearch = async () => {
+    if (!aiQuery.trim()) {
+      setAiIds(null)
+      return
+    }
+
+    setAiLoading(true)
+
+    try {
+      const res = await fetch('/api/ai-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: aiQuery, deals })
+      })
+
+      const data = await res.json()
+      setAiIds(data.ids || [])
+
+    } catch (err) {
+      console.error('AI SEARCH ERROR:', err)
+      setAiIds([])
+    } finally {
+      setAiLoading(false)
+    }
+    }
   })
 
   return (
     <div>
+      <div className="flex gap-2 mb-3">
+        <input
+          value={aiQuery}
+          onChange={(e) => setAiQuery(e.target.value)}
+          placeholder='Ask AI e.g. "big deals with Amazon"'
+          className="border p-2 rounded flex-1"
+        />
+
+        <button
+          onClick={handleAiSearch}
+          disabled={aiLoading}
+          className="bg-indigo-600 text-white px-3 py-2 rounded text-sm"
+        >
+          {aiLoading ? '...' : '🔍 AI Search'}
+        </button>
+
+        {aiIds !== null && (
+          <button
+            onClick={() => { setAiIds(null); setAiQuery('') }}
+            className="text-sm text-gray-600 px-2"
+          >
+            Clear
+          </button>
+        )}
+      </div>
 
       <div className="flex gap-2 mb-4">
         <input
