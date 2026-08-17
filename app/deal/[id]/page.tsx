@@ -3,6 +3,7 @@ import EditDealForm from './EditDealForm'
 import ActivityForm from './ActivityForm'
 import NotesEditor from './NotesEditor'
 import AISummary from './AISummary'
+import AINextAction from './AINextAction'
 
 export const dynamic = 'force-dynamic'
 
@@ -82,6 +83,7 @@ export default async function DealDetail({
 
       <ActivityForm dealId={deal.id} />
       <AISummary deal={deal} activities={activities ?? []} />
+      <AINextAction deal={deal} activities={activities ?? []} />
 
     </div>
   )
